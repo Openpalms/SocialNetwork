@@ -1,0 +1,13 @@
+.content {
+  grid-area: c;
+  background-color: lightgreen;
+}
+
+.block {
+  padding: 10px;
+}
+.img{
+  max-width: 30%;
+  border-radius: 10px;
+  border: 1px solid white;
+}

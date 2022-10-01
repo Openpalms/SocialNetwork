@@ -1,0 +1,18 @@
+.nav {
+  grid-area: n;
+  background-color: #fff;
+  padding: 20px;
+  min-height: 500px;
+  height: 100vw;
+}
+.nav a {
+  text-decoration: none;
+  color: black;
+}
+.nav a.active {
+  border-right: 1px solid rgb(0, 0, 0);
+  border-left: 1px solid rgb(0, 0, 0);
+}
+.online {
+  margin-top: 30px;
+}
