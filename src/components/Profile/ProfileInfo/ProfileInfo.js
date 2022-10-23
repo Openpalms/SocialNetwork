@@ -1,15 +1,32 @@
 import s from './ProfileInfo.module.css';
+import Preloader from '../../Common/Preloader/Preloader';
+import ProfileStatus from './ProfileStatus';
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+  if (!props.profile) {
+    return <Preloader />;
+  }
+
   return (
     <div>
-      <div>
-        <img
-          src="https://images.ctfassets.net/hrltx12pl8hq/4MFiRr9vFnbWzYoNSPiYXy/fca130dd40da59b06e83ee8d5789a23e/file-converter-shutterstock.jpg"
-          alt="ProfilePhoto" className={s.img}
+      <div></div>
+      <div className={s.block}>
+        <img src={props.profile.photos.small} alt="av" />
+        <ProfileStatus
+          status={props.status}
+          updateStatus={props.updateStatus}
         />
+        <div>
+          <div>Information:</div>
+          <div>{props.profile.aboutMe}</div>
+          <span>
+            {props.profile.lookingForAJob === false
+              ? 'I am not looking for job right now'
+              : 'I am looking for a job'}
+          </span>
+          <div>Contact me : {props.profile.contacts.github}</div>
+        </div>
       </div>
-      <div className={s.block}> ava + desc </div>
     </div>
   );
 };
