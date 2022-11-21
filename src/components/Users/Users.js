@@ -1,11 +1,14 @@
 import s from './users.module.css';
 import userPhoto from '../../assets/images/userPhoto.png';
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 let Users = (props) => {
   let pagesCount = Math.ceil(props.totalCount / props.pageSize);
   let pages = [];
+  let [portionNumber, setPortionNumber] = useState(1);
+  let leftPortionPageNumber = (portionNumber - 1) * props.pageSize + 1;
+  let rightPortionPageNumber = portionNumber * props.pageSize;
 
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
@@ -13,8 +16,20 @@ let Users = (props) => {
   return (
     <div>
       <div className={s.spans}>
-        {pages.map((item) => {
-          if (item < 20) {
+        {portionNumber > 1 && (
+          <button
+            onClick={() => {
+              setPortionNumber(portionNumber - 1);
+            }}
+          >
+            Left
+          </button>
+        )}
+        {pages
+          .filter(
+            (p) => p >= leftPortionPageNumber && p <= rightPortionPageNumber
+          )
+          .map((item) => {
             return (
               <span
                 className={props.currentPage === item ? s.selected : ''}
@@ -26,8 +41,16 @@ let Users = (props) => {
                 {item}
               </span>
             );
-          }
-        })}
+          })}
+        {pagesCount > portionNumber && (
+          <button
+            onClick={() => {
+              setPortionNumber(portionNumber + 1);
+            }}
+          >
+            Right
+          </button>
+        )}
       </div>
       {props.users.map((user) => (
         <div key={user.id} className={s.wrapper}>

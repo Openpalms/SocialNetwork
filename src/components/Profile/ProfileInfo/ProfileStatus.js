@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ProfileStatus = (props) => {
   let [editMode, setEditMode] = useState(false);
   let [text, setText] = useState(props.status);
+  useEffect(() => {
+    setText(props.status);
+  }, [props.status]);
   return (
     <>
       {!editMode ? (
@@ -12,13 +15,13 @@ const ProfileStatus = (props) => {
               setEditMode(true);
             }}
           >
-            {props.status || 'status'}
+            {props.status || 'Default Status '}
           </span>
         </div>
       ) : (
         <div>
           <input
-            value={text || 'change me'}
+            value={text || ''}
             onChange={(e) => {
               setText(e.currentTarget.value);
             }}

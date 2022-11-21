@@ -1,0 +1,12 @@
+.form .error :first-child {
+  border: 1px solid red;
+}
+
+.form span {
+  color: red;
+}
+.summaryError {
+  border: 1px solid red;
+  margin: 5px;
+  color: red;
+}

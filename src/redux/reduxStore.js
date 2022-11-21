@@ -8,6 +8,7 @@ import profileReducer from './profileReducer';
 import navbarReducer from './navbarReducer';
 import usersReducer from './usersReducer';
 import authReducer from './authReducer';
+import appReducer from './appReducer';
 import thunkMiddleware from 'redux-thunk';
 import { reducer as formReducer } from 'redux-form';
 
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   usersPage: usersReducer,
   auth: authReducer,
   form: formReducer,
+  app: appReducer,
 });
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));

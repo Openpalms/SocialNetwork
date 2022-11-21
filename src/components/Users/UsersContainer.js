@@ -11,6 +11,15 @@ import {
 import Preloader from '../Common/Preloader/Preloader';
 import { AuthNavigate } from '../../hoc/AuthNavigate';
 import { compose } from 'redux';
+import {
+  getUsersSelector,
+  getCurrentPage,
+  getIsAuth,
+  getIsButtonClicked,
+  getIsFetching,
+  getPageSize,
+  getTotalCount,
+} from '../../redux/usersSelectors';
 
 class UsersAPI extends React.Component {
   componentDidMount() {
@@ -40,13 +49,13 @@ class UsersAPI extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalCount: state.usersPage.totalCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    isButtonClicked: state.usersPage.isButtonClicked,
-    isAuth: state.auth.isAuth,
+    users: getUsersSelector(state),
+    pageSize: getPageSize(state),
+    totalCount: getTotalCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    isButtonClicked: getIsButtonClicked(state),
+    isAuth: getIsAuth(state),
   };
 };
 

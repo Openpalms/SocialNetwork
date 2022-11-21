@@ -15,14 +15,15 @@ export const userAPI = {
       });
   },
   followUser(id) {
-    return instance.post(
-      `https://social-network.samuraijs.com/api/1.0/follow/${id}`
-    );
+    return instance.post(`follow/${id}`);
   },
   unfollowUser(id) {
-    return instance.delete(
-      `https://social-network.samuraijs.com/api/1.0/follow/${id}`
-    );
+    return instance.delete(`follow/${id}`);
+  },
+};
+export const SecurityAPI = {
+  getCaptchaImage() {
+    return instance.get('security/get-captcha-url');
   },
 };
 export const profileAPI = {
@@ -35,10 +36,31 @@ export const profileAPI = {
   updateStatus(status) {
     return instance.put(`profile/status`, { status });
   },
+  savePhoto(file) {
+    let formData = new FormData();
+    formData.append('image', file);
+    return instance.put(`/profile/photo`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  updateInfo(info) {
+    return instance.put(`profile`, info);
+  },
 };
 
 export const authAPI = {
-  login: () => {
+  me: () => {
     return instance.get(`auth/me`);
+  },
+  login: (email, password, rememberMe = false, captcha = null) => {
+    return instance.post(`auth/login`, {
+      email,
+      password,
+      rememberMe,
+      captcha,
+    });
+  },
+  logout: () => {
+    return instance.delete(`auth/login`);
   },
 };

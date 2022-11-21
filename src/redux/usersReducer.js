@@ -8,7 +8,7 @@ const TOGGLE_LOADER = 'TOGGLE_LOADER';
 const TOGGLE_BUTTON = 'TOGGLE_BUTTON';
 const initialState = {
   users: [],
-  pageSize: 5,
+  pageSize: 10,
   totalCount: 0,
   currentPage: 2,
   isFetching: false,
@@ -91,6 +91,7 @@ export const toggleIsButtonClicked = (isFetching, userID) => ({
 export const getUsers = (currentPage, pageSize) => {
   return (dispatch) => {
     dispatch(toggleIsFetching(true));
+    dispatch(setPage(currentPage));
     userAPI.getUsers(currentPage, pageSize).then((response) => {
       dispatch(toggleIsFetching(false));
       dispatch(setUsers(response.items));
