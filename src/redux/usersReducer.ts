@@ -1,4 +1,8 @@
+import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { userAPI } from '../api/api';
+import { userType, ResultCodes } from '../types/types';
+import { AppStateType } from './reduxStore';
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
@@ -6,15 +10,21 @@ const SET_PAGE = 'SET_PAGE';
 const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT';
 const TOGGLE_LOADER = 'TOGGLE_LOADER';
 const TOGGLE_BUTTON = 'TOGGLE_BUTTON';
+
 const initialState = {
-  users: [],
+  users: [] as Array<userType>,
   pageSize: 10,
   totalCount: 0,
   currentPage: 2,
   isFetching: false,
-  isButtonClicked: [],
+  isButtonClicked: [] as Array<number>, ///array of userIDs
 };
-const usersReducer = (state = initialState, action) => {
+
+type initialStateType = typeof initialState;
+const usersReducer = (
+  state = initialState,
+  action: ActionTypes
+): initialStateType => {
   switch (action.type) {
     case FOLLOW:
       return {
@@ -55,41 +65,82 @@ const usersReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export const acceptFollow = (userID) => ({
+type ActionTypes =
+  | acceptFollowType
+  | acceptUnfollowType
+  | setUsersType
+  | setPageType
+  | setTotalCountType
+  | toggleIsFetchingType
+  | toggleIsButtonClickedType;
+type acceptFollowType = {
+  type: typeof FOLLOW;
+  userID: number;
+};
+export const acceptFollow = (userID: number): acceptFollowType => ({
   type: FOLLOW,
   userID,
 });
-export const acceptUnfollow = (userID) => ({
+type acceptUnfollowType = {
+  type: typeof UNFOLLOW;
+  userID: number;
+};
+export const acceptUnfollow = (userID: number): acceptUnfollowType => ({
   type: UNFOLLOW,
   userID,
 });
-
-export const setUsers = (users) => ({
+type setUsersType = {
+  type: typeof SET_USERS;
+  users: Array<userType>;
+};
+export const setUsers = (users: Array<userType>): setUsersType => ({
   type: SET_USERS,
   users,
 });
-
-export const setPage = (currentPage) => ({
+type setPageType = {
+  type: typeof SET_PAGE;
+  currentPage: number;
+};
+export const setPage = (currentPage: number): setPageType => ({
   type: SET_PAGE,
   currentPage,
 });
-export const setTotalCount = (count) => ({
+type setTotalCountType = {
+  type: typeof SET_TOTAL_COUNT;
+  count: number;
+};
+export const setTotalCount = (count: number): setTotalCountType => ({
   type: SET_TOTAL_COUNT,
   count,
 });
-export const toggleIsFetching = (isFetching) => ({
+type toggleIsFetchingType = {
+  type: typeof TOGGLE_LOADER;
+  isFetching: boolean;
+};
+export const toggleIsFetching = (
+  isFetching: boolean
+): toggleIsFetchingType => ({
   type: TOGGLE_LOADER,
   isFetching,
 });
-export const toggleIsButtonClicked = (isFetching, userID) => ({
+type toggleIsButtonClickedType = {
+  type: typeof TOGGLE_BUTTON;
+  isFetching: boolean;
+  userID: number;
+};
+export const toggleIsButtonClicked = (
+  isFetching: boolean,
+  userID: number
+): toggleIsButtonClickedType => ({
   type: TOGGLE_BUTTON,
   isFetching,
   userID,
 });
 
-export const getUsers = (currentPage, pageSize) => {
-  return (dispatch) => {
+type Thunk = ThunkAction<void, AppStateType, unknown, ActionTypes>;
+
+export const getUsers = (currentPage: number, pageSize: number): Thunk => {
+  return (dispatch, getState) => {
     dispatch(toggleIsFetching(true));
     dispatch(setPage(currentPage));
     userAPI.getUsers(currentPage, pageSize).then((response) => {
@@ -100,22 +151,22 @@ export const getUsers = (currentPage, pageSize) => {
   };
 };
 
-export const follow = (id) => {
+export const follow = (id: number): Thunk => {
   return (dispatch) => {
     dispatch(toggleIsButtonClicked(true, id));
     userAPI.followUser(id).then((response) => {
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCodes.success) {
         dispatch(acceptFollow(id));
       }
       dispatch(toggleIsButtonClicked(false, id));
     });
   };
 };
-export const unfollow = (id) => {
+export const unfollow = (id: number): Thunk => {
   return (dispatch) => {
     dispatch(toggleIsButtonClicked(true, id));
     userAPI.unfollowUser(id).then((response) => {
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCodes.success) {
         dispatch(acceptUnfollow(id));
       }
       dispatch(toggleIsButtonClicked(false, id));

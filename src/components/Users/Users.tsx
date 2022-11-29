@@ -1,58 +1,26 @@
 import s from './users.module.css';
 import userPhoto from '../../assets/images/userPhoto.png';
-import React, { useState } from 'react';
+import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import Pagination from './ Pagination';
+import { userType } from '../../types/types';
 
-let Users = (props) => {
-  let pagesCount = Math.ceil(props.totalCount / props.pageSize);
-  let pages = [];
-  let [portionNumber, setPortionNumber] = useState(1);
-  let leftPortionPageNumber = (portionNumber - 1) * props.pageSize + 1;
-  let rightPortionPageNumber = portionNumber * props.pageSize;
+type Props = {
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  onPageChange: (arg0: number) => void;
+  users: Array<userType>;
+  follow: (arg0: number) => void;
+  unfollow: (arg0: number) => void;
+  isButtonClicked: Array<number>;
+};
 
-  for (let i = 1; i <= pagesCount; i++) {
-    pages.push(i);
-  }
+let Users: FC<Props> = (props) => {
   return (
     <div>
-      <div className={s.spans}>
-        {portionNumber > 1 && (
-          <button
-            onClick={() => {
-              setPortionNumber(portionNumber - 1);
-            }}
-          >
-            Left
-          </button>
-        )}
-        {pages
-          .filter(
-            (p) => p >= leftPortionPageNumber && p <= rightPortionPageNumber
-          )
-          .map((item) => {
-            return (
-              <span
-                className={props.currentPage === item ? s.selected : ''}
-                key={item}
-                onClick={() => {
-                  props.onPageChange(item);
-                }}
-              >
-                {item}
-              </span>
-            );
-          })}
-        {pagesCount > portionNumber && (
-          <button
-            onClick={() => {
-              setPortionNumber(portionNumber + 1);
-            }}
-          >
-            Right
-          </button>
-        )}
-      </div>
-      {props.users.map((user) => (
+      <Pagination {...props} />
+      {props.users.map((user: userType) => (
         <div key={user.id} className={s.wrapper}>
           <span>
             <div>

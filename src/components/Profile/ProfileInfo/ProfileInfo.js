@@ -12,7 +12,6 @@ const ProfileInfo = (props) => {
       props.savePhoto(e.target.files[0]);
     }
   };
-
   return (
     <div>
       <div className="container">
@@ -32,8 +31,8 @@ const ProfileInfo = (props) => {
               }
               alt="av"
               className={s.img}
-            />
-
+            />{' '}
+            <span style={{ fontSize: '200%' }}>{props.profile.fullName}</span>
             <div>
               <span>
                 {!props.isOwner && (

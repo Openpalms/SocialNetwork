@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { WrappedFieldProps } from 'redux-form';
 import s from './Forms.module.css';
 
-const Blank = (props) => {
+const Blank = (props: any) => {
   return (
     <div className={s.form}>
       <div
@@ -18,7 +19,7 @@ const Blank = (props) => {
   );
 };
 
-export const TextArea = (props) => {
+export const TextArea: FC<WrappedFieldProps> = (props) => {
   return (
     <Blank {...props}>
       <textarea />
@@ -26,7 +27,7 @@ export const TextArea = (props) => {
   );
 };
 
-export const Input = (props) => {
+export const Input = (props: any) => {
   return (
     <Blank {...props}>
       <input

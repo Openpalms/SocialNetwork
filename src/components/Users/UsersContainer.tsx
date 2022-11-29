@@ -20,12 +20,27 @@ import {
   getPageSize,
   getTotalCount,
 } from '../../redux/usersSelectors';
+import { userType } from '../../types/types';
+import { AppStateType } from '../../redux/reduxStore';
 
-class UsersAPI extends React.Component {
+type Props = {
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  isButtonClicked: Array<number>;
+  users: Array<userType>;
+  isFetching: boolean;
+  getUsers: (arg0: number, arg1: number) => void;
+  onPageChange: (arg0: number) => void;
+  follow: (arg0: number) => void;
+  unfollow: (arg0: number) => void;
+};
+
+class UsersAPI extends React.Component<Props> {
   componentDidMount() {
     this.props.getUsers(this.props.currentPage, this.props.pageSize);
   }
-  onPageChange = (item) => {
+  onPageChange = (item: number) => {
     this.props.getUsers(item, this.props.pageSize);
   };
   render() {
@@ -47,7 +62,7 @@ class UsersAPI extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppStateType) => {
   return {
     users: getUsersSelector(state),
     pageSize: getPageSize(state),
@@ -58,16 +73,6 @@ const mapStateToProps = (state) => {
     isAuth: getIsAuth(state),
   };
 };
-
-// let   = AuthNavigate(UsersAPI);
-
-// export default connect(mapStateToProps, {
-//   follow,
-//   unfollow,
-//   setPage,
-//   toggleIsButtonClicked,
-//   getUsers,
-// })(RedirectComponent);
 
 export default compose(
   connect(mapStateToProps, {

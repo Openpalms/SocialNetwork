@@ -1,3 +1,4 @@
+type initialStateType = typeof initialState;
 const initialState = {
   friends: [
     { id: 1, name: 'oleg' },
@@ -6,7 +7,7 @@ const initialState = {
   ],
 };
 
-const navbarReducer = (state = initialState, action) => {
+const navbarReducer = (state = initialState, action: any): initialStateType => {
   return state;
 };
 export default navbarReducer;

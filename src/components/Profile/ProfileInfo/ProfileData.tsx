@@ -1,17 +1,31 @@
-import { useEffect, useState } from 'react';
-
-const ProfileData = (props) => {
+import React, { FC, useEffect, useState } from 'react';
+type Props = {
+  aboutMe: string;
+  fullName: string;
+  lookingForAJob: boolean;
+  userId: number;
+  updateInfo: (arg0: object) => void;
+  lookingForAJobDescription: string;
+  contacts: ContactsType;
+  name: string;
+};
+type ContactsType = {
+  github: string;
+};
+const ProfileData: FC<Props> = (props) => {
   let contacts = Object.values(props.contacts).filter(Boolean);
   let [editMode, setEditMode] = useState(false);
   let [name, setName] = useState(props.fullName);
   let [aboutMe, setaboutMe] = useState(props.aboutMe);
-  let [lfjob, setLfjob] = useState(props.lookingForAJob);
+  let [lfjob, setLfjob] = useState<boolean | string | null>(
+    props.lookingForAJob
+  );
   let [github, setGithub] = useState(props.contacts.github);
   let [lookingForAJobDescription, setLookingForAJobDescription] = useState(
     props.lookingForAJobDescription
   );
 
-  const information = {
+  const information: object = {
     userId: props.userId,
     aboutMe: aboutMe,
     fullName: name,
@@ -89,6 +103,7 @@ const ProfileData = (props) => {
           <input
             name="lookingForAJob"
             type="checkbox"
+            // @ts-ignore
             value={lfjob || ''}
             onChange={(e) => {
               setLfjob(e.currentTarget.value);
@@ -104,7 +119,7 @@ const ProfileData = (props) => {
             false ? null : (
               <>
                 <b> Contacts : </b>
-                {contacts.map((c, i) => (
+                {contacts.map((c: any, i) => (
                   <div key={i}>{c}</div>
                 ))}
               </>

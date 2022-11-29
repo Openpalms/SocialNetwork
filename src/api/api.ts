@@ -14,10 +14,10 @@ export const userAPI = {
         return response.data;
       });
   },
-  followUser(id) {
+  followUser(id: number) {
     return instance.post(`follow/${id}`);
   },
-  unfollowUser(id) {
+  unfollowUser(id: number) {
     return instance.delete(`follow/${id}`);
   },
 };
@@ -27,38 +27,62 @@ export const SecurityAPI = {
   },
 };
 export const profileAPI = {
-  getUserProfile(userID) {
+  getUserProfile(userID: number) {
     return instance.get(`profile/${userID}`);
   },
-  getStatus(userID) {
+  getStatus(userID: number) {
     return instance.get(`profile/status/${userID}`);
   },
-  updateStatus(status) {
+  updateStatus(status: string) {
     return instance.put(`profile/status`, { status });
   },
-  savePhoto(file) {
+  savePhoto(file: string) {
     let formData = new FormData();
     formData.append('image', file);
     return instance.put(`/profile/photo`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
-  updateInfo(info) {
+  updateInfo(info: string) {
     return instance.put(`profile`, info);
   },
 };
 
+type meType = {
+  data: {
+    id: number;
+    email: string;
+    login: string;
+  };
+  resultCode: number;
+  messages: Array<string>;
+};
+
+type loginType = {
+  data: {
+    id: number;
+  };
+  resultCode: number;
+  messages: Array<string>;
+};
 export const authAPI = {
   me: () => {
-    return instance.get(`auth/me`);
+    return instance.get<meType>(`auth/me`).then((response) => response.data);
   },
-  login: (email, password, rememberMe = false, captcha = null) => {
-    return instance.post(`auth/login`, {
-      email,
-      password,
-      rememberMe,
-      captcha,
-    });
+  login: (
+    email: string,
+    password: string,
+    rememberMe = false,
+    captcha: string | null = null
+  ) => {
+    return instance
+      .post<loginType>(`auth/login`, {
+        email,
+        password,
+        rememberMe,
+        captcha,
+      })
+      .then((response) => response.data);
   },
   logout: () => {
     return instance.delete(`auth/login`);
